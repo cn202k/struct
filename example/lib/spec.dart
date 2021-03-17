@@ -2,9 +2,15 @@ import 'package:struct/struct.dart';
 
 @struct
 typedef Person(
-  String name, {
-  int age,
+  @length(max: 20) String name, {
+  @notEmpty int age,
   required int home,
   int? nullable,
   required int? nullableReq,
+});
+
+@struct
+typedef User({
+  String id,
+  String name,
 });

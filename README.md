@@ -5,3 +5,4 @@
 - [ ] Generate hashCode/equals methods
 - [ ] Generate import directives
 - [ ] Add @union
+- [ ] Add more `ValueValidator`s
