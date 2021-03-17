@@ -1,0 +1,14 @@
+targets:
+  $default:
+    builders:
+      struct|struct_generator:
+        enabled: true
+
+builders:
+  struct:
+    import: "package:struct_generator/struct_generator.dart"
+    builder_factories: ["struct_generator"]
+    build_extensions: {".dart": [".struct.part"]}
+    auto_apply: dependents
+    build_to: source 
+    applies_builders: ["source_gen|combining_builder"]

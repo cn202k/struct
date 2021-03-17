@@ -1,0 +1,20 @@
+name: struct_generator
+description: A new Flutter package project.
+version: 0.0.1
+author:
+homepage:
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  struct:
+    path: ../struct
+  build: ">=1.5.0 <1.6.0"
+  source_gen: ^0.9.0 
+  code_builder: ^3.6.0
+  dart_style: ">=1.3.0 <1.4.0"
+  analyzer: ">=0.40.0 <0.41.0"
+
+dev_dependencies:
+  test:

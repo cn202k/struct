@@ -1,0 +1,13 @@
+name: struct
+description: A new Flutter package project.
+version: 0.0.1
+author:
+homepage:
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  collection: ^1.14.13
+
+dev_dependencies:
