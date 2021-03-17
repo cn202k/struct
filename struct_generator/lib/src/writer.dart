@@ -1,7 +1,7 @@
 import 'package:code_builder/code_builder.dart';
 
-String write(Iterable<Spec> specs) {
-  final emitter = DartEmitter();
-  if (specs.isEmpty) return '';
-  return specs.map((spec) => spec.accept(emitter).toString()).join('\n\n');
+String write(Library library) {
+  if (library.body.isEmpty) return '';
+  final emitter = DartEmitter(Allocator.simplePrefixing());
+  return library.accept(emitter).toString();
 }

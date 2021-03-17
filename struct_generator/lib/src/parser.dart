@@ -28,6 +28,9 @@ StructSpec _parseStruct(_StructElement structElement) {
 DartObject? _findStructAnnotation(Element element) =>
     const TypeChecker.fromRuntime(Struct).firstAnnotationOfExact(element);
 
+bool _isStructElement(Element element) =>
+    _findStructAnnotation(element) != null;
+
 _StructElement? _toStructElement(Element element) {
   final annotation = _findStructAnnotation(element);
   if (annotation == null) return null;
@@ -73,16 +76,34 @@ Iterable<ValueValidatorSpec> _parseValueValidators(
               .isAssignableFrom(value.type.element);
     }).map((it) => ValueValidatorSpec(
           source: it.toSource().replaceFirst('@', ''),
+          url: _parseElementUri(it.element),
         ));
 
 FieldTypeSpec _parseFieldType(ParameterElement element) {
   final name = _parseParameterType(element);
   final isNullable = _isNullableType(name);
-  final maybeStruct = _toStructElement(element.type.element);
-  final spec = maybeStruct != null ? _parseStruct(maybeStruct) : null;
+  final isStruct = _isStructElement(element);
+  final uri = _parseElementUri(element.type.element);
   return FieldTypeSpec(
-      name: name, isNullable: isNullable, spec: spec, url: null);
+    name: name,
+    isNullable: isNullable,
+    isStruct: isStruct,
+    url: uri,
+  );
 }
+
+String? _parseElementUri(Element element) {
+  final uri = element.source.uri;
+  print(uri.toString());
+  if (_isCoreLibrary(uri)) return null;
+  if (!_isStructElement(element)) return uri.toString();
+  return _generatedFileUriOf(uri);
+}
+
+String _generatedFileUriOf(Uri uri) =>
+    uri.toString().replaceFirst(r'\.dart', '.struct.dart');
+
+bool _isCoreLibrary(Uri uri) => uri.toString().startsWith('dart:core');
 
 final _starOrBracketOrBrace = RegExp(r'\*|\[|\]|\{|\}|(required)');
 final _whitespaces = RegExp(r'\s+');

@@ -1,10 +1,10 @@
 import 'package:code_builder/code_builder.dart';
 import 'package:struct_generator/src/models.dart';
 
-class StructClass {
+class StructClassTemplate {
   final StructSpec _struct;
 
-  StructClass(this._struct);
+  StructClassTemplate(this._struct);
 
   Class inflate() => Class(
         (klass) => klass
@@ -22,8 +22,8 @@ class _Field {
   Field inflate() => Field(
         (field) => field
           ..name = _field.name
-          ..type = refer(_field.type.name, _field.type.url)
-          ..modifier = FieldModifier.final$,
+          ..modifier = FieldModifier.final$
+          ..type = refer(_field.type.name),
       );
 }
 
@@ -60,6 +60,7 @@ class _Constructor {
 
   String _assertionCode() {
     final codes = <String>[];
+
     for (final field in _struct.fields) {
       for (final validator in field.validators) {
         codes.add('''

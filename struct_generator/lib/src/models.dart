@@ -37,20 +37,24 @@ class FieldSpec {
 
 class ValueValidatorSpec {
   final String source;
+  final String? url;
 
-  ValueValidatorSpec({required this.source});
+  ValueValidatorSpec({
+    required this.source,
+    required this.url,
+  });
 }
 
 class FieldTypeSpec {
   final String? name;
   final bool isNullable;
-  final StructSpec? spec;
+  final bool isStruct;
   final String? url;
 
   FieldTypeSpec({
     required this.name,
     required this.isNullable,
-    required this.spec,
+    required this.isStruct,
     required this.url,
   });
 }
