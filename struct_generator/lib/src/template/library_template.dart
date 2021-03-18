@@ -23,7 +23,13 @@ class LibraryTemplate {
     for (final struct in _library.structs) {
       for (final field in struct.fields) {
         final uri = field.type.url;
-        if (uri != null) uris.add(uri);
+        if (uri != null) {
+          uris.add(
+            field.type.spec != null
+                ? uri.replaceFirst('.dart', '.struct.dart')
+                : uri,
+          );
+        }
         for (final validator in field.validators) {
           final uri = validator.url;
           if (uri != null) uris.add(uri);

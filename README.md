@@ -3,6 +3,6 @@
 - [ ] Generate builders
 - [ ] Support generics
 - [ ] Generate hashCode/equals methods
-- [ ] Generate import directives
+- [x] Generate import directives
 - [ ] Add @union
 - [ ] Add more `ValueValidator`s

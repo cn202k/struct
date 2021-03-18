@@ -48,13 +48,13 @@ class ValueValidatorSpec {
 class FieldTypeSpec {
   final String? name;
   final bool isNullable;
-  final bool isStruct;
+  final StructSpec? spec;
   final String? url;
 
   FieldTypeSpec({
     required this.name,
     required this.isNullable,
-    required this.isStruct,
+    required this.spec,
     required this.url,
   });
 }
