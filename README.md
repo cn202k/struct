@@ -6,3 +6,4 @@
 - [x] Generate import directives
 - [ ] Add @union
 - [ ] Add more `ValueValidator`s
+- [ ] Parse parameter types from source code
