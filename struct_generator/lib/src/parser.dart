@@ -1,5 +1,9 @@
+import 'dart:math';
+
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/nullability_suffix.dart';
+import 'package:analyzer/dart/element/type.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:struct/struct.dart';
 import 'package:struct_generator/src/models.dart';
@@ -24,6 +28,10 @@ StructSpec _parseStruct(_StructElement structElement) {
     fields: element.function.parameters.map(_parseStructFields),
   );
 }
+
+// String _parseStructNameSource(FunctionTypeAliasElement structElement) {
+//   // structElement.na
+// }
 
 DartObject? _findStructAnnotation(Element element) =>
     const TypeChecker.fromRuntime(Struct).firstAnnotationOfExact(element);
@@ -88,10 +96,13 @@ Iterable<ValueValidatorSpec> _parseValueValidators(
         ));
 
 FieldTypeSpec _parseFieldType(ParameterElement element) {
-  final name = _parseParameterType(element);
-  final isNullable = _isNullableType(name);
-  final uri = _parseElementUri(element.type.element);
-  final maybeStruct = _toStructElement(element.type.element);
+  final name = _parseParameterTypeSource(element);
+  final DartType? type = element.type;
+  final Element? typeElement = type?.element;
+  final isNullable = type != null ? _isNullableType(type) : false;
+  final uri = typeElement != null ? _parseElementUri(typeElement) : null;
+  final maybeStruct =
+      typeElement != null ? _toStructElement(typeElement) : null;
   final spec = maybeStruct != null ? _parseStruct(maybeStruct) : null;
   return FieldTypeSpec(
     name: name,
@@ -102,23 +113,38 @@ FieldTypeSpec _parseFieldType(ParameterElement element) {
 }
 
 String? _parseElementUri(Element element) {
-  final uri = element.source.uri;
+  final Uri? uri = element.source?.uri;
+  if (uri == null) return null;
   if (_isCoreLibrary(uri)) return null;
   return uri.toString();
 }
 
 bool _isCoreLibrary(Uri uri) => uri.toString().startsWith('dart:core');
 
-final _starOrBracketOrBrace = RegExp(r'\*|\[|\]|\{|\}|(required)');
-final _whitespaces = RegExp(r'\s+');
+final _typeParams = r'<(\w|\?|,|<|>|\(|\)|\s)+>';
+final _identifier = r'\w+';
+final _nullSuffix = r'\?';
+final _spaces = r'\s*';
+final _typedType = [
+  _identifier,
+  '($_typeParams)?',
+  '$_nullSuffix?',
+].join(_spaces);
 
-String _parseParameterType(ParameterElement element) {
-  final tokens = element
-      .getDisplayString(withNullability: true)
-      .replaceAll(_starOrBracketOrBrace, '')
-      .split(_whitespaces);
-  tokens.removeLast();
-  return tokens.join(' ');
+final _type = RegExp('$_typedType\$');
+
+String _parseParameterTypeSource(ParameterElement element) {
+  final source =
+      element.source.contents.data.substring(0, element.nameOffset).trim();
+  final result = _type.firstMatch(source)?.group(0);
+  if (result == null) {
+    throw InvalidGenerationSourceError(
+      "Function type syntax is not supported, use a function type alias instead",
+      element: element,
+    );
+  }
+  return result;
 }
 
-bool _isNullableType(String type) => type.endsWith('?');
+bool _isNullableType(DartType type) =>
+    type.nullabilitySuffix.index == NullabilitySuffix.question;

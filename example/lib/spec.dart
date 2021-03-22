@@ -1,4 +1,3 @@
-import 'package:example/example.dart';
 import 'package:example/user.dart';
 import 'package:struct/struct.dart';
 

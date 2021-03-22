@@ -4,10 +4,27 @@
 // StructGenerator
 // **************************************************************************
 
-class User {
-  const User({required this.id, required this.name});
+import 'package:struct/src/value_validators.dart';
 
-  final String id;
+class User {
+  User({
+    required this.id,
+    required this.name,
+    required this.fog,
+    required this.xxx,
+  }) : assert(() {
+          String? error;
+          error = notEmpty.test(name);
+          assert(error == null, error);
+
+          return true;
+        }());
+
+  final String? id;
 
   final String name;
+
+  final Map<int, List<String>>? fog;
+
+  final dynamic xxx;
 }
