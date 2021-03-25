@@ -6,10 +6,12 @@ class LibrarySpec {
 
 class StructSpec {
   final String name;
+  final Iterable<String> typeParameters;
   final Iterable<FieldSpec> fields;
 
   StructSpec({
     required this.name,
+    required this.typeParameters,
     required this.fields,
   });
 }
@@ -18,7 +20,7 @@ class FieldSpec {
   final String? name;
   final FieldTypeSpec type;
   final bool isOptional;
-  final bool isRequired;
+  final bool shouldBeMarkedAsRequired;
   final bool isNamed;
   final Iterable<ValueValidatorSpec> validators;
 
@@ -26,13 +28,10 @@ class FieldSpec {
     required this.name,
     required this.type,
     required this.isOptional,
-    required this.isRequired,
+    required this.shouldBeMarkedAsRequired,
     required this.isNamed,
     required this.validators,
-  }) : assert(
-          !(!type.isNullable && isOptional && !isRequired),
-          "'$name' : non-nullable optional parameter is not allowed",
-        );
+  });
 }
 
 class ValueValidatorSpec {

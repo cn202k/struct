@@ -4,7 +4,7 @@
 // StructGenerator
 // **************************************************************************
 
-import 'package:example/user.struct.dart';
+import 'package:example/user.dart';
 
 class Person {
   const Person(this.user);

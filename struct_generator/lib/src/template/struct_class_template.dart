@@ -9,6 +9,7 @@ class StructClassTemplate {
   Class inflate() => Class(
         (klass) => klass
           ..name = _struct.name
+          ..types.addAll(_struct.typeParameters.map((it) => refer(it)))
           ..fields.addAll(_struct.fields.map((it) => _Field(it).inflate()))
           ..constructors.add(_Constructor(_struct).inflate()),
       );
@@ -37,7 +38,7 @@ class _Constructor {
           ..name = field.name
           ..toThis = true
           ..named = field.isNamed
-          ..required = field.isRequired,
+          ..required = field.shouldBeMarkedAsRequired,
       );
 
   Constructor inflate() => Constructor(

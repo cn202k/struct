@@ -1,7 +1,7 @@
 ## TODO
 
 - [ ] Generate builders
-- [ ] Support generics
+- [x] Support generics
 - [ ] Generate hashCode/equals methods
 - [x] Generate import directives
 - [ ] Add @union

@@ -12,5 +12,6 @@ class StructGenerator extends Generator {
     LibraryReader library,
     BuildStep buildStep,
   ) =>
-      write(inflate(parse(library)));
+      // write(inflate(parse(library)));
+      write(inflate(Parser().parse(library)));
 }

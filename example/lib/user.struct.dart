@@ -4,15 +4,17 @@
 // StructGenerator
 // **************************************************************************
 
+import 'package:example/user.dart';
 import 'package:struct/src/value_validators.dart';
 
-class User {
-  User({
-    required this.id,
-    required this.name,
-    required this.fog,
-    required this.xxx,
-  }) : assert(() {
+class User<T extends List<String>> {
+  User(
+      {this.id,
+      required this.tags,
+      required this.name,
+      this.fog,
+      required this.xxx})
+      : assert(() {
           String? error;
           error = notEmpty.test(name);
           assert(error == null, error);
@@ -21,6 +23,8 @@ class User {
         }());
 
   final String? id;
+
+  final T tags;
 
   final String name;
 
